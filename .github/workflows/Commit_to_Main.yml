@@ -12,7 +12,7 @@ on:
   # create:
     # branches: ["main"]
 jobs:
-  test-job:
+  ValidateAddress:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
