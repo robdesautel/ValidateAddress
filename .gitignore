@@ -1,0 +1,38 @@
+# Build Folders
+[Bb]in/
+[Oo]bj/
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+# Logs
+*.log
+Logs/
+# Visual Studio specific files
+.vs/
+*.vscode/
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+# NuGet Packages
+*.nupkg
+**/packages/*
+!**/packages/build/
+# Node.js dependencies
+node_modules/
+# Publish Web Output
+*.Publish.xml
+# Azure related files
+*.azurePubxml
+# Temporary files
+~$*
+*.tmp
+# Database files
+*.mdf
+*.ldf
+# Others
+ClientBin/
+Generated_Code/
