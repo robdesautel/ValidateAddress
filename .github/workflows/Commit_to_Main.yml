@@ -32,7 +32,7 @@ jobs:
     # Add API Key to appsettings.json when cloned, forked, or local repo sync
     - name: Inject API key into appsettings.json
       run: |
-       jq --arg key "$API_KEY" '.Here.ApiKey = $key' ValidateAddress/Common.Address/appsettings.json > temp.json && mv temp.json ValidateAddress/Common.Address/appsettings.json
+       jq --arg key "$API_KEY" '.Here.ApiKey = $key' src/ValidateAddress/Common.Address/appsettings.json > temp.json && mv temp.json src/ValidateAddress/Common.Address/appsettings.json
   # This workflow contains a single job called "build"
   # build:
     # The type of runner that the job will run on
