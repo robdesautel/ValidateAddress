@@ -4,9 +4,27 @@ name: Common.Address.WF
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+
+  # Triggers the workflow on push, create, or fork request events but only for the "main" branch
   push:
     branches: [ "main" ]
+
+  # create:
+    # branches: ["main"]
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.HERE_PLATFORM_API_KEY }}
+    steps:
+    - name: "start"
+      run: |
+        echo $API_KEY
+  # fork:
+    # branches: ["main"]
+
+  # pull_request:
+    # branches: ["main"]
   # pull_request:
     # branches: [ "main" ]
 
@@ -14,25 +32,25 @@ on:
   # workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  setup:
-    runs-on: ubuntu-latest
-    env:
-      API_KEY: ${{ secrets.HERE_PLATFORM_API_KEY }}
+# jobs:
+  # setup:
+    # runs-on: ubuntu-latest
+    # env:
+      # API_KEY: ${{ secrets.HERE_PLATFORM_API_KEY }}
    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    # steps:
+    # - name: Checkout code
+      # uses: actions/checkout@v3
 
     # Test print of the API key
-    - name: Use API key
-      run: |
-       echo Using API key: $API_KEY
+    # - name: Use API key
+      # run: |
+       # echo Using API key: $API_KEY
 
     # Add API Key to appsettings.json when cloned, forked, or local repo sync
-    - name: Inject API key into appsettings.json
-      run: |
-       jq --arg key "$API_KEY" '.Here.ApiKey = $key' src/ValidateAddress/Common.Address/appsettings.json > temp.json && mv temp.json src/ValidateAddress/Common.Address/appsettings.json
+    # - name: Inject API key into appsettings.json
+      # run: |
+       # jq --arg key "$API_KEY" '.Here.ApiKey = $key' src/ValidateAddress/Common.Address/appsettings.json > temp.json && mv temp.json src/ValidateAddress/Common.Address/appsettings.json
   # This workflow contains a single job called "build"
   # build:
     # The type of runner that the job will run on
