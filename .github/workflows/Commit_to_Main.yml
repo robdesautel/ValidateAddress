@@ -12,14 +12,17 @@ on:
   # create:
     # branches: ["main"]
 jobs:
-  setup:
+  test-job:
     runs-on: ubuntu-latest
-    env:
-      HERE_PLATFORM: ${{ secrets.APIKEY }}
     steps:
-    - name: "start"
-      run: |
-        echo $API_KEY
+    - name: Checkout Code
+      uses: action/checkout@v3
+
+    - name: Get repository secret
+      env:
+         ApiKey: ${{ secrets.HERE_PLATFORM_API_KEY}}
+      run: echo "api key: $ApiKey"
+  
   # fork:
     # branches: ["main"]
 
