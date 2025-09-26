@@ -22,11 +22,11 @@ jobs:
    
     steps:
     - name: Checkout code
-    - uses: actions/checkout@v3
+      uses: actions/checkout@v3
 
     # Test print of the API key
     - name: Use API key
-    - run: |
+      run: |
        echo Using API key: $API_KEY
 
     # Add API Key to appsettings.json when cloned, forked, or local repo sync
