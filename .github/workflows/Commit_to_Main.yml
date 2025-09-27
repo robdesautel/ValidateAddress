@@ -5,7 +5,6 @@ name: Common.Address.WF
 on:
   # Triggers the workflow on push, create, or fork request events but only for the "main" branch
   push:
-    branches: [ "main" ]
 
 jobs: 
   ValidateAddress:
