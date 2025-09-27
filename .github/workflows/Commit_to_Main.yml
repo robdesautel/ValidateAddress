@@ -16,8 +16,9 @@ jobs:
     - name: Print appsettings.json before update
       run: cat Common.Address/appsettings.json
 
-    - name: Clear Api key into appsettings.json
+    - name: Inject API key into appsettings.json
       run: |
-        jq --arg key "$API_KEY" '.Here.ApiKey = $key' Common.Address/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
+       jq --arg key "$API_KEY" '.Here.ApiKey = $key' Common.Address/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
       env:
-        API_KEY: ${{ secrets.HERE_PLATFORM_API_KEY }}
+       API_KEY: ${{ secrets.HERE_PLATFORM_API_KEY }}
+
