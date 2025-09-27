@@ -22,7 +22,7 @@ jobs:
 
     - name: Get repository secret
       run: |
-        jq --arg key "$API_KEY" '.Here.ApiKey = $key' Common.Adress/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
+        jq --arg key "$API_KEY" '.Here.ApiKey = $key' Common.Address/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
       env:
          ApiKey: ${{ secrets.HERE_PLATFORM_API_KEY}}
       # run: echo "api key-$ApiKey"
