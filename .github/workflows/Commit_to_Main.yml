@@ -8,7 +8,10 @@ on:
   # Triggers the workflow on push, create, or fork request events but only for the "main" branch
   push:
     branches: [ "main" ]
-
+    
+    paths:
+      - '**/appsettings.json'
+   
   # create:
     # branches: ["main"]
 jobs:
@@ -21,7 +24,9 @@ jobs:
     - name: Get repository secret
       env:
          ApiKey: ${{ secrets.HERE_PLATFORM_API_KEY}}
-      run: echo "api key-$ApiKey"
+      run: echo "api key-$ApiKey, paths-$paths"
+     
+  
   
   # fork:
     # branches: ["main"]
