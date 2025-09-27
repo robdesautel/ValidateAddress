@@ -18,9 +18,7 @@ jobs:
 
     - name: Reset HERE API key
       run: |
-    - name: Force clear API key
-      run: |
-        sed -i 's/"ApiKey": *".*"/"ApiKey": ""/' Common.Address/appsettings.json
+       jq '.Here.ApiKey = "TEST KEY"' Common.Address/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
 
     - name: Print appsettings.json after update
       run: cat Common.Address/appsettings.json
