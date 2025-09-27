@@ -27,3 +27,11 @@ jobs:
        
     - name: Show updated appsettings.json
       run: cat Common.Address/appsettings.json
+
+    - name: Commit update appsettings.json
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add Common.Address/appsettings.json
+        git commit -m "Inject API key into appsettings.json"
+        git push
