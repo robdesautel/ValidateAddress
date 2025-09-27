@@ -24,7 +24,7 @@ jobs:
     - name: Get repository secret
       env:
          ApiKey: ${{ secrets.HERE_PLATFORM_API_KEY}}
-      run: echo "api key-$ApiKey, paths-$paths"
+      run: echo "api key-$ApiKey"
      
   
   
