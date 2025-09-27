@@ -23,7 +23,7 @@ jobs:
 
     - name: Clear ApiKey using variable (with fallback)
       run: |
-        jq --arg key "${API_KEY:-}" '.Here.ApiKey = $key' Common.Address/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
+        jq --arg key "$API_KEY" '.Here.ApiKey = $key' Common.Address/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
     
     - name: Show updated appsettings.json
       run: cat Common.Address/appsettings.json
