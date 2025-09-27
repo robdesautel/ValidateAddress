@@ -9,8 +9,7 @@ on:
   push:
     branches: [ "main" ]
     
-    paths:
-      - '**/appsettings.json'
+    
    
   # create:
     # branches: ["main"]
