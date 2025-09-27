@@ -18,7 +18,7 @@ jobs:
 
     - name: Reset HERE API key
       run: |
-       jq '.Here.ApiKey = "TEST KEY"' Common.Address/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
+       jq 'Here.ApiKey = "TEST KEY"' Common.Address/appsettings.json > temp.json && mv temp.json Common.Address/appsettings.json
 
     - name: Print appsettings.json after update
       run: cat Common.Address/appsettings.json
