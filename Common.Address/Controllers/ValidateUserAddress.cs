@@ -1,6 +1,7 @@
 ﻿using Common.Address.Model;
 using Common.Address.Work;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace Common.Address.Controllers
 {
@@ -27,6 +28,38 @@ namespace Common.Address.Controllers
             var address = await _herePlatformValidator.ValidateAsync(userAddress);
 
             return Ok(address);
+        }
+        /// <summary>
+        /// Assuming all postal code given will be US format
+        /// 5 digit zip
+        /// optional 9 digit zip with suffix of plus four
+        /// </summary>
+        /// <param name="postalCode"></param>
+        /// <returns></returns>
+        [HttpPost("{postalCode}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(Error))]
+        public async Task<IActionResult> ValidatePostalCode(string postalCode)
+        {
+
+            if (string.IsNullOrWhiteSpace(postalCode) ||
+                postalCode.Length < 5 ||
+                postalCode.Length > 10)
+            {   
+                var error = new Error
+                {
+                    ErrorType = "Incorrect Format",
+                    ErrorNumber = "1",
+                    ErrorMessage = "Please enter a valid postal code to search."
+                };
+                return BadRequest(error);
+            }
+            var isPostalCode = await _herePlatformValidator.IsValidPostalCode(postalCode);
+
+            if (isPostalCode is null) return BadRequest();
+
+            return Ok();
+            
         }
     }
 }

@@ -13,13 +13,13 @@ namespace Common.Address.Work
 
         public HerePlatformValidator(IConfiguration config, HttpClient httpClient)
         {
-            _apiKey = Environment.GetEnvironmentVariable("ADDRESS_API_KEY", EnvironmentVariableTarget.User) ?? throw new Exception("ADDRESS_API_KEY was not set in the environment please run exe file to set this up.")
+            _apiKey = Environment.GetEnvironmentVariable("ADDRESS_API_KEY", EnvironmentVariableTarget.User) ?? throw new Exception("ADDRESS_API_KEY was not set in the environment please run exe file to set this up.");
             _url = config["Here:BaseUri"] ?? throw new Exception();
             _geocodeEndpoint = config["Here:GeocodeEndpoint"] ?? throw new Exception();
             _httpClient = httpClient ?? throw new ArgumentNullException();
         }
 
-        public async Task<RootObject?> ValidateAsync(UserAddress input)
+        public async Task<RootObject> ValidateAsync(UserAddress input)
         {
             var query = $"{input.Street} {input.City} {input.State} {input.ZipCode} {input.Country}";
             var requestUrl = $"{_url}{_geocodeEndpoint}?q={Uri.EscapeDataString(query)}&apiKey={_apiKey}&addressNamesMode=normalized";
@@ -33,20 +33,25 @@ namespace Common.Address.Work
 
             return result;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="postalCode"></param>
+        /// <returns></returns>
+        public async Task<bool?> IsValidPostalCode(string postalCode) {
 
-        private string GetComponent(dynamic addressComponents, string type)
-        {
-            foreach (var component in addressComponents)
-            {
-                foreach (var t in component.types)
-                {
-                    if (t == type)
-                    {
-                        return component.long_name;
-                    }
-                }
-            }
-            return string.Empty;
+            var requestUrl = $"{_url}{_geocodeEndpoint}?q={Uri.EscapeDataString(postalCode)}&apiKey={_apiKey}";
+            
+            var response = await _httpClient.GetAsync(requestUrl);            
+            if (!response.IsSuccessStatusCode) return null;
+
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<RootObject>(json);
+
+            return result?.Items
+                    .Where(p => p.LocalityType.Equals("postalcode", StringComparison.InvariantCultureIgnoreCase) &&
+                        p.Address.CountryCode.Equals("USA", StringComparison.InvariantCultureIgnoreCase) &&
+                        p.Address.PostalCode.Equals(postalCode)).FirstOrDefault() is not null;
         }
     }
 }

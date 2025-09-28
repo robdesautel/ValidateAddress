@@ -13,6 +13,9 @@ namespace Common.Address.Model.HerePlatform
         [JsonPropertyName("resultType")]
         public required string ResultType { get; set; }
 
+        [JsonPropertyName("localityType")]
+        public string? LocalityType { get; set; }
+
         [JsonPropertyName("houseNumberType")]
         public required string HouseNumberType { get; set; }
 
