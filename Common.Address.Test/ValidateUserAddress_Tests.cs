@@ -1,9 +1,12 @@
 ﻿using Common.Address.Controllers;
+using Common.Address.Enumerators;
 using Common.Address.Model;
+using Common.Address.Model.HerePlatform;
 using Common.Address.Work;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NJsonSchema.Generation.TypeMappers;
 using System.Diagnostics.Eventing.Reader;
 
@@ -120,6 +123,48 @@ namespace Common.Address.Test
             }
 
             DisposeHttpClient();
+        }
+
+        [Test]
+        public void IsValidLocationListDictionaryTest()
+        {
+            _herePlatformValidator = new HerePlatformValidator(_configuration, _httpClient);
+
+            var query = new List<Dictionary<SubqueryType, string>> { new Dictionary<SubqueryType, string> { { SubqueryType.state, "ZZ" } } };
+
+            var result = _herePlatformValidator?.IsValidLocation(query).Result;
+
+            Assert.That(result, Is.Not.EqualTo(null));
+
+            if (result is not null)
+            {
+                Assert.That(result, Is.True);
+            }
+            else
+            {
+                Assert.That(result, Is.False);
+            }
+        }
+
+        [Test]
+        public void IsValidLocationJsonDocTest()
+        {
+            //This allows the capability of searching dynamic queries to ensure user input is accurate.
+
+            //receiving json doc from client
+            var jsonDoc = "{\"items\": [{\"subquery\": {\"state\": \"ga\"}},{\"subquery\": {\"postalCode\": \"30082\"}}]}";
+
+            //converting json doc to List<Dictionary<enum, string>>
+            //using custom JSON Enum mapping for Dictionary<enum, string>
+            var subqueryList = JsonConvert.DeserializeObject<SubqueryList>(jsonDoc);
+
+            //passed
+            Assert.That(subqueryList?.Subquery, Is.Not.Null);
+            
+            //passed
+            Assert.That(subqueryList?.Subquery.Count, Is.GreaterThan(0));
+
+            //TODO: finish testing the _herePlatformValidator.IsValidLocation(SubqueryList) member
         }
 
         [TearDown]
