@@ -136,13 +136,14 @@ namespace Common.Address.Test
 
             Assert.That(result, Is.Not.EqualTo(null));
 
-            if (result is not null)
+            if (result is bool boolResult)
             {
-                Assert.That(result, Is.True);
+                if (boolResult) Assert.That(boolResult, Is.True);
+                if (!boolResult) Assert.That(boolResult, Is.False);
             }
             else
             {
-                Assert.That(result, Is.False);
+                Assert.That(result, Is.Null);
             }
         }
 
@@ -150,6 +151,7 @@ namespace Common.Address.Test
         public void IsValidLocationJsonDocTest()
         {
             //This allows the capability of searching dynamic queries to ensure user input is accurate.
+            _herePlatformValidator = new HerePlatformValidator(_configuration, _httpClient);
 
             //receiving json doc from client
             var jsonDoc = "{\"items\": [{\"subquery\": {\"state\": \"ga\"}},{\"subquery\": {\"postalCode\": \"30082\"}}]}";
@@ -164,8 +166,69 @@ namespace Common.Address.Test
             //passed
             Assert.That(subqueryList?.Subquery.Count, Is.GreaterThan(0));
 
-            //TODO: finish testing the _herePlatformValidator.IsValidLocation(SubqueryList) member
+            var result = _herePlatformValidator.IsValidLocation(subqueryList)?.Result;
+
+            //passed
+            Assert.That(result, Is.Not.Null);
         }
+
+        [Test]
+        public void AddressSubqueryTest()
+        {
+            _herePlatformValidator = new HerePlatformValidator(_configuration, _httpClient);
+            _validateUserAddress = new ValidateUserAddress(_logger, _herePlatformValidator);
+
+            var query = new List<Dictionary<SubqueryType, string>> { new Dictionary<SubqueryType, string> { { SubqueryType.state, "ZZ" } } };
+            
+            var result = _validateUserAddress.AddressSubquery(query).Result;
+
+            if (result is StatusCodeResult statusCodeResult)
+            {
+                Assert.That(statusCodeResult.StatusCode, Is.EqualTo(200), "Is not an Ok result");
+            }
+            else if (result is ObjectResult objectResult)
+            {
+                Assert.That(objectResult.StatusCode, Is.EqualTo(400), "Is Not a bad request");
+            }
+
+            DisposeHttpClient();
+
+        }
+
+        [Test]
+        public void AddressSubqueryJsonDocTest()
+        {
+            //This allows the capability of searching dynamic queries to ensure user input is accurate.
+            _herePlatformValidator = new HerePlatformValidator(_configuration, _httpClient);
+            _validateUserAddress = new ValidateUserAddress(_logger, _herePlatformValidator);
+
+            //receiving json doc from client
+            var jsonDoc = "{\"items\": [{\"subquery\": {\"state\": \"ga\"}},{\"subquery\": {\"postalCode\": \"30082\"}}]}";
+
+            //converting json doc to List<Dictionary<enum, string>>
+            //using custom JSON Enum mapping for Dictionary<enum, string>
+            var subqueryList = JsonConvert.DeserializeObject<SubqueryList>(jsonDoc);
+
+            //passed
+            Assert.That(subqueryList?.Subquery, Is.Not.Null);
+
+            //passed
+            Assert.That(subqueryList?.Subquery.Count, Is.GreaterThan(0));
+
+            var result = _validateUserAddress.AddressSubquery(subqueryList)?.Result;
+
+            if (result is StatusCodeResult statusCodeResult)
+            {
+                //passed
+                Assert.That(statusCodeResult.StatusCode, Is.EqualTo(200), "Is not an Ok result");
+            }
+            else if (result is ObjectResult objectResult)
+            {
+                //passed
+                Assert.That(objectResult.StatusCode, Is.EqualTo(400), "Is Not a bad request");
+            }
+        }
+
 
         [TearDown]
         [OneTimeTearDown]

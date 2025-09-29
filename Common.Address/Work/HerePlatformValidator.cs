@@ -79,9 +79,14 @@ namespace Common.Address.Work
             string q = "qq=country=United States";
             string subq = string.Empty;
 
+            int i = 1;
             foreach (var subQuery in subQueries.Subquery)
             {
-                subq += string.Join(";",ConcatSubQuery(subQuery.SubqueryValues));
+                if (i > 1) subq += ";";
+
+                i++;
+
+                subq += ConcatSubQuery(subQuery.SubqueryValues);
             }
 
             q += subq;

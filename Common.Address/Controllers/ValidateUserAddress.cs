@@ -1,4 +1,6 @@
-﻿using Common.Address.Model;
+﻿using Common.Address.Enumerators;
+using Common.Address.Model;
+using Common.Address.Model.HerePlatform;
 using Common.Address.Work;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
@@ -21,7 +23,7 @@ namespace Common.Address.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(RootObject))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RootObject))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ValidateAddress(UserAddress userAddress)
         {
@@ -45,7 +47,7 @@ namespace Common.Address.Controllers
             if (string.IsNullOrWhiteSpace(postalCode) ||
                 postalCode.Length < 5 ||
                 postalCode.Length > 10)
-            {   
+            {
                 var error = new Error
                 {
                     ErrorType = "Incorrect Format",
@@ -59,7 +61,77 @@ namespace Common.Address.Controllers
             if (isPostalCode is null) return BadRequest();
 
             return Ok();
-            
+
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(Error))]
+        public async Task<IActionResult> AddressSubquery(List<Dictionary<SubqueryType, string>> subquery)
+        {
+            var result = await _herePlatformValidator.IsValidLocation(subquery);
+            Error error;
+
+            if (result is bool boolResult)
+            {
+                if (boolResult) return Ok();
+                if (!boolResult)
+                {
+                    error = new Error
+                    {
+                        ErrorType = "Subqery returned no results.",
+                        ErrorNumber = "1",
+                        ErrorMessage = "Please enter a valid format."
+                    };
+
+                    return BadRequest(error);
+                }
+            }
+
+            error = new Error
+            {
+                ErrorType = "Subqery returned no results.",
+                ErrorNumber = "1",
+                ErrorMessage = "Please enter a valid format."
+            };
+
+            return BadRequest(error);
+
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(Error))]
+        public async Task<IActionResult> AddressSubquery(SubqueryList subqueries)
+        {
+            var result = await _herePlatformValidator.IsValidLocation(subqueries);
+            Error error;
+
+            if (result is bool boolResult)
+            {
+                if (boolResult) return Ok();
+                if (!boolResult)
+                {
+                    error = new Error
+                    {
+                        ErrorType = "Subqery returned no results.",
+                        ErrorNumber = "1",
+                        ErrorMessage = "Please enter a valid format."
+                    };
+
+                    return BadRequest(error);
+                }
+            }
+
+            error = new Error
+            {
+                ErrorType = "Subqery returned no results.",
+                ErrorNumber = "1",
+                ErrorMessage = "Please enter a valid format."
+            };
+
+            return BadRequest(error);
+
         }
     }
 }
