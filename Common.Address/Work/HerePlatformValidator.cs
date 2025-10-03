@@ -42,11 +42,12 @@ namespace Common.Address.Work
         /// </summary>
         /// <param name="postalCode"></param>
         /// <returns></returns>
-        public async Task<bool?> IsValidPostalCode(string postalCode) {
+        public async Task<bool?> IsValidPostalCode(string postalCode)
+        {
 
             var requestUrl = $"{BaseQuery}?q={Uri.EscapeDataString(postalCode)}";
-            
-            var response = await _httpClient.GetAsync(requestUrl);            
+
+            var response = await _httpClient.GetAsync(requestUrl);
             if (!response.IsSuccessStatusCode) return null;
 
             var json = await response.Content.ReadAsStringAsync();
@@ -58,12 +59,14 @@ namespace Common.Address.Work
                         p.Address.PostalCode.Equals(postalCode)).FirstOrDefault() is not null;
         }
 
-        public async Task<bool?> IsValidLocation(Subquery subQueries)
+        public async Task<bool?> IsValidLocation(Subquery subQuery)
         {
             string q = "qq=country=United State;";
             string? subq = string.Empty;
 
-            q += subQueries;
+            if (subQuery.SubqueryValue.Count > 1) return null;
+
+            q += ConcatSubQuery(subQuery.SubqueryValue);
 
             var result = await QueryResult<RootObject>(q) as RootObject;
 
@@ -75,14 +78,9 @@ namespace Common.Address.Work
             string q = "qq=country=United States";
             string subq = string.Empty;
 
-            int i = 1;
-            foreach (var subQuery in subQueries.Subquery)
+            foreach (var subQuery in subQueries.Subqueries)
             {
-                if (i > 1) subq += ";";
-
-                i++;
-
-                subq += ConcatSubQuery(subQuery.SubqueryValues);
+                subq += ConcatSubQuery(subQuery.SubqueryValue);
             }
 
             q += subq;
@@ -93,8 +91,14 @@ namespace Common.Address.Work
         private string ConcatSubQuery(Dictionary<SubqueryType, string> subQuery)
         {
             string subq = string.Empty;
+
+            int i = 1;
             foreach (var subquery in subQuery)
             {
+                if (i > 1) subq += ";";
+
+                i++;
+
                 subq += $"{subquery.Key}={subquery.Value}";
             }
             return subq;

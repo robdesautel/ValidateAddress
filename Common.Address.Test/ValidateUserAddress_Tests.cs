@@ -130,9 +130,9 @@ namespace Common.Address.Test
         {
             _herePlatformValidator = new HerePlatformValidator(_configuration, _httpClient);
 
-            var query = new List<Dictionary<SubqueryType, string>> { new Dictionary<SubqueryType, string> { { SubqueryType.state, "ZZ" } } };
+            var subquery = new Subquery() { SubqueryValue = new Dictionary<SubqueryType, string> { { SubqueryType.state, "GA" } } };
 
-            var result = _herePlatformValidator?.IsValidLocation(query).Result;
+            var result = _herePlatformValidator?.IsValidLocation(subquery).Result;
 
             Assert.That(result, Is.Not.EqualTo(null));
 
@@ -154,17 +154,17 @@ namespace Common.Address.Test
             _herePlatformValidator = new HerePlatformValidator(_configuration, _httpClient);
 
             //receiving json doc from client
-            var jsonDoc = "{\"items\": [{\"subquery\": {\"state\": \"ga\"}},{\"subquery\": {\"postalCode\": \"30082\"}}]}";
+            var jsonDoc = "{\"items\": [{\"subquery\": {\"state\": \"ga\", \"postalCode\": \"30082\"}}]}";
 
             //converting json doc to List<Dictionary<enum, string>>
             //using custom JSON Enum mapping for Dictionary<enum, string>
             var subqueryList = JsonConvert.DeserializeObject<SubqueryList>(jsonDoc);
 
             //passed
-            Assert.That(subqueryList?.Subquery, Is.Not.Null);
+            Assert.That(subqueryList?.Subqueries, Is.Not.Null);
             
             //passed
-            Assert.That(subqueryList?.Subquery.Count, Is.GreaterThan(0));
+            Assert.That(subqueryList?.Subqueries.Count, Is.GreaterThan(0));
 
             var result = _herePlatformValidator.IsValidLocation(subqueryList)?.Result;
 
@@ -178,8 +178,8 @@ namespace Common.Address.Test
             _herePlatformValidator = new HerePlatformValidator(_configuration, _httpClient);
             _validateUserAddress = new ValidateUserAddress(_logger, _herePlatformValidator);
 
-            var query = new List<Dictionary<SubqueryType, string>> { new Dictionary<SubqueryType, string> { { SubqueryType.state, "ZZ" } } };
-            
+            var query = new Subquery() { SubqueryValue = new Dictionary<SubqueryType, string> { { SubqueryType.state, "GA" } } };
+
             var result = _validateUserAddress.AddressSubquery(query).Result;
 
             if (result is StatusCodeResult statusCodeResult)
@@ -203,17 +203,17 @@ namespace Common.Address.Test
             _validateUserAddress = new ValidateUserAddress(_logger, _herePlatformValidator);
 
             //receiving json doc from client
-            var jsonDoc = "{\"items\": [{\"subquery\": {\"state\": \"ga\"}},{\"subquery\": {\"postalCode\": \"30082\"}}]}";
+            var jsonDoc = "{\"items\": [{\"subquery\": {\"state\": \"ga\", \"postalCode\": \"30082\"}}]}";
 
             //converting json doc to List<Dictionary<enum, string>>
             //using custom JSON Enum mapping for Dictionary<enum, string>
             var subqueryList = JsonConvert.DeserializeObject<SubqueryList>(jsonDoc);
 
             //passed
-            Assert.That(subqueryList?.Subquery, Is.Not.Null);
+            Assert.That(subqueryList?.Subqueries, Is.Not.Null);
 
             //passed
-            Assert.That(subqueryList?.Subquery.Count, Is.GreaterThan(0));
+            Assert.That(subqueryList?.Subqueries.Count, Is.GreaterThan(0));
 
             var result = _validateUserAddress.AddressSubquery(subqueryList)?.Result;
 

@@ -8,6 +8,6 @@ namespace Common.Address.Model.HerePlatform
 
         [JsonProperty("subquery")]
         [JsonConverter(typeof(EnumKeyDictionaryConverter<SubqueryType, string>))]
-        public required Dictionary<SubqueryType, string> SubqueryValues { get; set; }
+        public required Dictionary<SubqueryType, string> SubqueryValue { get; set; }
     }
 }
