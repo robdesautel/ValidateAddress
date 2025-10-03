@@ -2,10 +2,10 @@
 {
     public class UserAddress
     {
-        public string Street { get; set; } = string.Empty;
-        public string City { get; set; } = string.Empty;
-        public string State { get; set; } = string.Empty;
-        public string ZipCode { get; set; } = string.Empty;
-        public string Country { get; set; } = string.Empty;
+        public required string Street { get; set; }
+        public required string City { get; set; }
+        public required string State { get; set; }
+        public required string ZipCode { get; set; }
+        public required string Country { get; set; }
     }
 }
