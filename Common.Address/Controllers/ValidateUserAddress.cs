@@ -64,7 +64,7 @@ namespace Common.Address.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("AddressSubquery/Dictionary")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(Error))]
         public async Task<IActionResult> AddressSubquery(List<Dictionary<SubqueryType, string>> subquery)
@@ -99,7 +99,7 @@ namespace Common.Address.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("AddressSubquery/List")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(Error))]
         public async Task<IActionResult> AddressSubquery(SubqueryList subqueries)

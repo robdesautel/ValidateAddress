@@ -1,5 +1,3 @@
-using Common.Address.Interface;
-using Common.Address.Model;
 using Common.Address.Work;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,16 +24,15 @@ app.UseSwaggerUi();
 //});
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.MapOpenApi();
 
-app.UseHttpsRedirection();
+//}
+
+//app.UseHttpsRedirection();
+app.MapControllers();
 
 app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
