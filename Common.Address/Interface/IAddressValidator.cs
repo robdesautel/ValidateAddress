@@ -8,7 +8,7 @@ namespace Common.Address.Interface
     {
         Task<T?> ValidateAsync(UserAddress input);
         Task<bool?> IsValidPostalCode(string postalCode);
-        Task<bool?> IsValidLocation(List<Dictionary<SubqueryType, string>> subQueries);
+        Task<bool?> IsValidLocation(Subquery subQueries);
         Task<bool?> IsValidLocation(SubqueryList subqueries);
 
     }

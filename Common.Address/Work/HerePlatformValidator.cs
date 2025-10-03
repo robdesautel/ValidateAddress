@@ -58,17 +58,13 @@ namespace Common.Address.Work
                         p.Address.PostalCode.Equals(postalCode)).FirstOrDefault() is not null;
         }
 
-        public async Task<bool?> IsValidLocation(List<Dictionary<SubqueryType, string>> subQueries)
+        public async Task<bool?> IsValidLocation(Subquery subQueries)
         {
             string q = "qq=country=United State;";
             string? subq = string.Empty;
 
-            foreach (var subqueries in subQueries)
-            {
-                subq += string.Join(";",ConcatSubQuery(subqueries));
-            }
+            q += subQueries;
 
-            q += subq;
             var result = await QueryResult<RootObject>(q) as RootObject;
 
             return result?.Items.Count > 0;

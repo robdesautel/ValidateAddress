@@ -67,7 +67,7 @@ namespace Common.Address.Controllers
         [HttpPost("AddressSubquery/Dictionary")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(Error))]
-        public async Task<IActionResult> AddressSubquery(List<Dictionary<SubqueryType, string>> subquery)
+        public async Task<IActionResult> AddressSubquery(Subquery subquery)
         {
             var result = await _herePlatformValidator.IsValidLocation(subquery);
             Error error;
