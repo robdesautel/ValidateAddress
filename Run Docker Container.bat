@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Script Name: DockerSetupAndRun.bat
+:: Script Name: Run Docker Container.bat
 :: Description: Checks for Docker installation, manages existing containers and images, builds and runs a Docker container for the Common Address API, tests endpoints, and opens the Swagger UI in the browser.
 :: Assumptions:
 :: - Dockerfile is in the current directory.
@@ -13,14 +13,22 @@ setlocal enabledelayedexpansion
 :: - Runs on Windows (BAT file)
 
 :: Set variables
-set IMAGE_NAME=common-address-api
+set REPO_NAME=robdesautel
+set IMAGE_BASE_NAME=common-address
+:: Replace with your desired tag, e.g., v1.0.0
+set IMAGE_TAG=latest
+set IMAGE_NAME=%REPO_NAME%/%IMAGE_BASE_NAME%:%IMAGE_TAG%
 set CONTAINER_NAME=common-address-api
 set HOST_PORT=8080
 set CONTAINER_PORT=80
-set WEATHER_ENDPOINT=http://localhost:%HOST_PORT%/weatherforecast
-set SWAGGER_ENDPOINT=http://localhost:%HOST_PORT%/swagger/v1/swagger.json
-set SWAGGER_UI=http://localhost:%HOST_PORT%/swagger/index.html
-set MAX_WAIT=30  :: Max seconds to wait for container startup
+:: Test Endpoint
+set WEATHER_ENDPOINT=http://localhost:%HOST_PORT%/weatherforecast 
+:: Test Swagger Connection
+set SWAGGER_ENDPOINT=http://localhost:%HOST_PORT%/swagger/v1/swagger.json 
+:: Launch in Browser
+set SWAGGER_UI=http://localhost:%HOST_PORT%/swagger/index.html 
+:: Max seconds to wait for container startup
+set MAX_WAIT=30  
 
 echo [INFO] Starting Docker setup and run process...
 

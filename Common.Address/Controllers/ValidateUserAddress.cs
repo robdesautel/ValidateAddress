@@ -22,7 +22,7 @@ namespace Common.Address.Controllers
             _herePlatformValidator = herePlatformValidator;
         }
 
-        [HttpPost]
+        [HttpPost("/ValidateAddress")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RootObject))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ValidateAddress(UserAddress userAddress)

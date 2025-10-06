@@ -30,9 +30,9 @@ app.MapOpenApi();
 
 //}
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.MapControllers();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.Run();

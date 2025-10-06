@@ -16,7 +16,7 @@ namespace Common.Address.Work
 
         public HerePlatformValidator(IConfiguration config, HttpClient httpClient)
         {
-            _apiKey = Environment.GetEnvironmentVariable("ADDRESS_API_KEY", EnvironmentVariableTarget.User) ?? throw new Exception("ADDRESS_API_KEY was not set in the environment please run exe file to set this up.");
+            _apiKey = Environment.GetEnvironmentVariable("ADDRESS_API_KEY") ?? throw new Exception("ADDRESS_API_KEY was not set in the environment please run exe file to set this up.");
             _url = config["Here:BaseUri"] ?? throw new Exception();
             _geocodeEndpoint = config["Here:GeocodeEndpoint"] ?? throw new Exception();
             _httpClient = httpClient ?? throw new ArgumentNullException();
